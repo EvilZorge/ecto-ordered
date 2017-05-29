@@ -43,11 +43,12 @@ defmodule EctoOrderedTest do
       |> Repo.insert!
       assert model.position == i
     end
-    assert (from m in Model, select: m.position) |> Repo.all == Enum.into(1..10, [])
+    assert (from m in Model, select: m.position) |> Repo.all |> Enum.sort() == Enum.into(1..10, [])
   end
 
   test "inserting item with a correct appending position" do
     %Model{title: "item with no position, going to be #1"} |> Repo.insert
+
     model = %Model{title: "item #2", position: 2}
     |> Model.changeset(%{})
     |> Repo.insert!

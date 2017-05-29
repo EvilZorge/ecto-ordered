@@ -112,7 +112,7 @@ defmodule EctoOrdered do
     execute_increment(struct, query)
   end
 
-  defp increment_position(%Order{repo: r, module: module, field: field, scope: scope, new_position: split_by, new_scope: new_scope} = struct) when is_list(scope) do
+  defp increment_position(%Order{module: module, field: field, scope: scope, new_position: split_by, new_scope: new_scope} = struct) when is_list(scope) do
     query =
       module
       |> where([m], field(m, ^field) >= ^split_by)
@@ -197,7 +197,7 @@ defmodule EctoOrdered do
   end
 
   defp update_max(%Order{repo: repo} = struct, cs) do
-    rows = query(struct, cs) |> repo.all |> Enum.reject(&is_nil/1)
+    rows = query(struct, cs) |> repo.all
     max = (rows == [] && 0) || Enum.max(rows)
     %{struct|max: max}
   end
